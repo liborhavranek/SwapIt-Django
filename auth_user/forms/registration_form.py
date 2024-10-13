@@ -1,4 +1,7 @@
-# auth_user/registration_form.py
+"""
+Author: Made with love by Libor Raven
+Date: 13.10.2024
+"""
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -7,6 +10,11 @@ from django.core.validators import MinLengthValidator
 
 
 class UserRegisterForm(UserCreationForm):
+    """
+    Formulář pro registraci uživatele s přidanými poli pro jméno, příjmení, a e-mail.
+    Obsahuje také vlastní validace pro uživatelské jméno a email, aby se zajistilo,
+    že se nebudou duplikovat existující hodnoty v databázi.
+    """
     first_name = forms.CharField(
         label='Jméno',
         required=True,
@@ -70,24 +78,30 @@ class UserRegisterForm(UserCreationForm):
     )
 
     class Meta:
+        """Nastavuje model a pole, která budou použita v tomto formuláři."""
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
+    def clean_email(self) -> str:
+        """
+       Zajišťuje, že emailová adresa není již použita jiným uživatelem.
+       """
+        email: str = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise ValidationError('Tento email je již používán.')
         return email
 
-    def clean_username(self):
-        username = self.cleaned_data.get('username')
+    def clean_username(self) -> str:
+        """Zajišťuje, že přihlašovací jméno není již použito jiným uživatelem."""
+        username: str = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():
             raise ValidationError('Přihlašovací jméno je již používáno.')
         return username
 
-    def clean_password2(self):
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
+    def clean_password2(self) -> str:
+        """Kontroluje, zda jsou obě zadaná hesla stejná."""
+        password1: str = self.cleaned_data.get('password1')
+        password2: str = self.cleaned_data.get('password2')
         if password1 and password2 and password1 != password2:
             raise ValidationError('Hesla se neshodují.')
         return password2
