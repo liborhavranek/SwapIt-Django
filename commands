@@ -1,0 +1,16 @@
+run tests
+
+python manage.py test
+
+migrate app
+
+python manage.py migrate
+
+run app
+
+python manage.py runserver 8080
+
+
+precommit
+
+pre-commit run --all-files

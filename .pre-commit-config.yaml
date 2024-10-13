@@ -1,0 +1,42 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0  # Verze repozitáře pre-commit-hooks
+    hooks:
+      - id: trailing-whitespace       # Odstraní koncové mezery na řádcích
+      - id: end-of-file-fixer         # Ujistí se, že soubory končí prázdným řádkem
+      - id: check-yaml                # Kontrola syntaktické správnosti YAML souborů
+      - id: check-added-large-files   # Upozorní na přidání velkých souborů (např. nad 5MB)
+      - id: check-merge-conflict      # Upozorní na pozůstatky merge konfliktů
+      - id: check-ast                 # Kontrola syntaktické správnosti Python kódu pomocí AST
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        args:
+          - "--max-line-length=120"  # Maximální délka řádku nastavena na 120 znaků
+        files: "\\.(py)$"  # Použije kontrolu na všechny Python soubory
+  - repo: local
+    hooks:
+      - id: mypy
+        name: "Check Typing Annotations with mypy"
+        entry: mypy
+        language: system
+        types: [python]
+        args:
+          - --disallow-untyped-defs  # Zakáže definice funkcí bez typových anotací
+          - --disallow-incomplete-defs  # Zakáže částečné typové anotace
+        files: "\\.(py)$"  # Použije kontrolu na všechny Python soubory
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.0
+    hooks:
+      - id: prettier
+        name: prettier
+        entry: prettier
+        language: node
+        types: [html]
+        files: "\\.(html)$"
+        args:
+          - --write
