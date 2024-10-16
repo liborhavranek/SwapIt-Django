@@ -5,6 +5,7 @@ Date: 13.10.2024
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
+from .utils import get_registration_test_user_data
 
 
 class RegistrationPageTest(TestCase):
@@ -21,27 +22,13 @@ class RegistrationPageTest(TestCase):
 
     def test_register_valid_user_have_response_302(self) -> None:
         """Testuje úspěšnou registraci uživatele s platnými údaji včetně jména a příjmení"""
-        data = {
-            'first_name': 'Test',
-            'last_name': 'User',
-            'username': 'testuser',
-            'email': 'testuser@example.com',
-            'password1': 'complex_password_123',
-            'password2': 'complex_password_123',
-        }
+        data = get_registration_test_user_data()
         response = self.client.post(reverse('registration'), data)
         self.assertEqual(response.status_code, 302)
 
     def test_register_valid_user_save_user_in_db(self) -> None:
         """Testuje úspěšnou registraci uživatele s platnými údaji včetně jména a příjmení"""
-        data = {
-            'first_name': 'Test',
-            'last_name': 'User',
-            'username': 'testuser',
-            'email': 'testuser@example.com',
-            'password1': 'complex_password_123',
-            'password2': 'complex_password_123',
-        }
+        data = get_registration_test_user_data()
         self.client.post(reverse('registration'), data)
         self.assertTrue(User.objects.filter(username='testuser').exists())
 
