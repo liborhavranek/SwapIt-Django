@@ -2,9 +2,10 @@
 Author: Made with love by Libor Raven
 Date: 13.10.2024
 """
-from django.contrib.auth import login
-from django.http import HttpResponse
+from django.contrib.auth import login, logout
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, FormView
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -46,3 +47,12 @@ class LoginView(FormView):
     def form_invalid(self, form: CustomAuthenticationForm) -> HttpResponse:
         messages.error(self.request, 'Nesprávné přihlašovací údaje. Zkuste to znovu.')
         return super().form_invalid(form)
+
+
+class LogoutView(View):
+    """Třída pro odhlášení uživatele"""
+    def get(self, request: HttpRequest) -> HttpResponseRedirect:
+        """Odhlášení uživatele"""
+        logout(request)
+        messages.success(request, 'Odhlášení proběhlo úspěšně.')
+        return HttpResponseRedirect(reverse_lazy('home'))

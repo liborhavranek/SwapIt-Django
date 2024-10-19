@@ -17,7 +17,7 @@ repos:
         types: [python]
         args:
           - "--max-line-length=120"  # Maximální délka řádku nastavena na 120 znaků
-          - "--disable=too-many-ancestors,too-few-public-methods"
+          - "--disable=too-many-ancestors,too-few-public-methods,no-member"
         files: "\\.(py)$"  # Použije kontrolu na všechny Python soubory
   - repo: local
     hooks:

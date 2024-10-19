@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <ul>
+      {% for category in categories %}
+      <li>
+        {{ category.name }} {% if category.get_subcategories %}
+        <ul>
+          {% for subcategory in category.get_subcategories %}
+          <li>
+            {{ subcategory.name }} {% if subcategory.get_subcategories %}
+            <!-- Rekurzivní volání pro pod-podkategorie -->
+            <ul>
+              {% for sub_subcategory in subcategory.get_subcategories %}
+              <li>{{ sub_subcategory.name }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
